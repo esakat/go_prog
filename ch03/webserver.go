@@ -5,17 +5,26 @@ import (
 	"net/http"
 )
 
-type MyHnadler struct{}
+type HelloHnadler struct{}
 
-func (h *MyHnadler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello World!")
+func (h *HelloHnadler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Hello")
+}
+
+type WorldHandler struct{}
+
+func (h *WorldHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "World!")
 }
 
 func main() {
-	handler := MyHnadler{}
+	hello := HelloHnadler{}
+	world := WorldHandler{}
 	server := http.Server{
-		Addr:    "127.0.0.1:8080",
-		Handler: &handler,
+		Addr: "127.0.0.1:8080",
 	}
+	http.Handle("/hello", &hello)
+	http.Handle("/world", &world)
+
 	server.ListenAndServe()
 }
